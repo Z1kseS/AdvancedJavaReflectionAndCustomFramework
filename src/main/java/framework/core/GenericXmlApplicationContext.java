@@ -95,7 +95,7 @@ public class GenericXmlApplicationContext {
                                 + currentFieldClass.getName()    + " found. Please check your configuration file.");
                     }
 
-                    match =    classes.stream().filter(canInstantiate(currentFieldClass)).findFirst().get();
+                    match = classes.stream().filter(canInstantiate(currentFieldClass)).findFirst().get();
 
                     if (classes.stream().anyMatch(canInstantiate(currentFieldClass)
                             .and(isTheSameClassAs(match).negate()))) {
