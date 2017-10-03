@@ -42,10 +42,10 @@
 		<constructor-arg type="int" value="4" />
 	</bean>
 
-	<interceptor id="interceptor1"
+	<bean id="interceptor1"
 		class="application.classes.CapitalizingInterceptor" />
 
-	<interceptor id="interceptor2"
+	<bean id="interceptor2"
 		class="application.classes.LowerCasingInterceptor" />
 
 

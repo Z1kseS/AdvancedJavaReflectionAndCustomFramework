@@ -1,10 +1,13 @@
-package framework.core;
+package framework.core.context;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.function.Predicate;
 
-import framework.core.XmlBeanDefinitionReader.ParserTypes;
+import framework.core.annotations.Autowiring;
+import framework.core.factory.BeanFactory;
+import framework.core.factory.impl.GenericBeanFactory;
+import framework.core.reader.impl.SaxXmlBeanDefinitionReader;
 
 public class GenericXmlApplicationContext {
 
@@ -30,10 +33,10 @@ public class GenericXmlApplicationContext {
 	private static final String CONFIG_FILE_NAME = GenericXmlApplicationContext.class
 			.getResource("/GS_SpringXMLConfig.xml").getPath();
 
-	private final XmlBeanDefinitionReader reader;
+	private final SaxXmlBeanDefinitionReader reader;
 	private BeanFactory beanFactory;
 
-	public XmlBeanDefinitionReader getReader() {
+	public SaxXmlBeanDefinitionReader getReader() {
 		return reader;
 	}
 
@@ -115,20 +118,12 @@ public class GenericXmlApplicationContext {
 
 	public GenericXmlApplicationContext(String xmlFileLocation) {
 		this.xmlFileLocation = xmlFileLocation;
-		reader = new XmlBeanDefinitionReader();
+		reader = new SaxXmlBeanDefinitionReader();
 		try {
-			beanFactory = new XmlBeanFactory(this.xmlFileLocation, reader);
+			beanFactory = new GenericBeanFactory<String>(this.xmlFileLocation, reader);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void setValidating(boolean validating) {
-		reader.setValidating(validating);
-	}
-
-	public void setParserType(ParserTypes parserType) {
-		reader.setParserType(parserType);
 	}
 
 	public void load(String xmlFileLocation) {

@@ -6,7 +6,7 @@ import java.util.List;
 public class Bean {
 
 	private String name;
-	private String className = "String";
+	private String className = "java.lang.String";
 
 	public enum Scope {
 		Prototype("prototype"), Singleton("singleton");

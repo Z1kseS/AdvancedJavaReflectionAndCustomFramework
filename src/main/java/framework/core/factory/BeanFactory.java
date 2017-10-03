@@ -1,4 +1,4 @@
-package framework.core;
+package framework.core.factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -37,7 +37,6 @@ public interface BeanFactory {
     
     Object getBean(String string) throws Exception;
     <T extends Object> T getBean(String string, Class<T> type) throws Exception;
-    Object[] getInterceptors();
     
     default Class<?> getPrimitiveClassForName(String primitiveTypeName) {
         Class<?> res = null;

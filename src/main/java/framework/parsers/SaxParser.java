@@ -16,7 +16,6 @@ import org.xml.sax.helpers.DefaultHandler;
 public class SaxParser extends DefaultHandler implements Parser {
 
 	private List<Bean> beanList;
-	private List<Bean> interceptorList;
 
 	private String xmlFileName;
 	private Stack<Bean> beansTmp = new Stack<>();
@@ -30,14 +29,9 @@ public class SaxParser extends DefaultHandler implements Parser {
 		return beanList;
 	}
 
-	public List<Bean> getInterceptorList() {
-		return interceptorList;
-	}
-
 	public SaxParser(String xmlFileName) {
 		this.xmlFileName = xmlFileName;
 		beanList = new ArrayList<Bean>();
-		interceptorList = new ArrayList<Bean>();
 		parseDocument();
 	}
 

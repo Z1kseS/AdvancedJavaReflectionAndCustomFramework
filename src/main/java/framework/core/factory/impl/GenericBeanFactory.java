@@ -1,4 +1,4 @@
-package framework.core;
+package framework.core.factory.impl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -8,13 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import framework.core.factory.BeanFactory;
+import framework.core.reader.BeanDefinitionReader;
 import framework.parsers.Bean;
 import framework.parsers.Property;
 
-public class XmlBeanFactory implements BeanFactory {
+public class GenericBeanFactory<T> implements BeanFactory {
 
 	private Map<String, Object> objectTable = new HashMap<>();
-	private Map<String, Object> interceptorTable = new HashMap<>();
 
 	// Need to keep all beans in order to support different scopes
 	private Map<String, Bean> beanTable = new HashMap<>();
@@ -24,11 +25,9 @@ public class XmlBeanFactory implements BeanFactory {
 
 	private int noNameBeanId = 0;
 
-	public XmlBeanFactory(String xmlFilePath, XmlBeanDefinitionReader xbdr) throws Exception {
-		xbdr.loadBeanDefinitions(xmlFilePath);
-		topologicalSort(xbdr.getBeanList());
+	public GenericBeanFactory(T provider, BeanDefinitionReader<T> xbdr) throws Exception {
+		topologicalSort(xbdr.getBeanList(provider));
 		generateBeans(new ArrayList<>(sortedBeans));
-		setupInterceptors(xbdr.getInterceptorList());
 	}
 
 	private void topologicalSort(List<Bean> beans) {
@@ -101,7 +100,7 @@ public class XmlBeanFactory implements BeanFactory {
 				char first = Character.toUpperCase(parsedBeanProperty.getName().charAt(0));
 				String methodName = "set" + first + parsedBeanProperty.getName().substring(1);
 				Method method = object.getClass().getMethod(methodName,
-						new Class[] { parsedBeanProperty.getBean().getClassName().getClass() });
+						new Class[] { Class.forName(parsedBeanProperty.getBean().getClassName()) });
 				method.invoke(object, calculateBean(parsedBeanProperty.getBean()));
 			}
 		}
@@ -149,29 +148,13 @@ public class XmlBeanFactory implements BeanFactory {
 		}
 	}
 
-	private void setupInterceptors(List<Bean> interceptorList) {
-		for (Bean b : interceptorList) {
-			try {
-				final Class<?> clazz = Class.forName(b.getClassName());
-				Object interceptor = clazz.getConstructor().newInstance();
-				interceptorTable.put(b.getName(), interceptor);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
-
-	public Object getBean(String string) throws Exception {
+	public synchronized Object getBean(String string) throws Exception {
 		return calculateBean(beanTable.get(string));
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T getBean(String string, Class<T> type) throws Exception {
-		return (T) getBean(string);
-	}
-
-	public Object[] getInterceptors() {
-		return (Object[]) interceptorTable.values().toArray();
+	public synchronized <K> K getBean(String string, Class<K> type) throws Exception {
+		return (K) getBean(string);
 	}
 
 }
