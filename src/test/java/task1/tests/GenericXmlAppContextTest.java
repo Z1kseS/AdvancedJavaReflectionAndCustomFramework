@@ -35,13 +35,13 @@ public class GenericXmlAppContextTest {
     }
     
     @Test
-    public void testGetBean() {
+    public void testGetBean() throws Exception {
         GenericXmlApplicationContext tester = new GenericXmlApplicationContext();
         assertNotNull(tester.getBeanFactory().getBean("bus"));
     }
     
     @Test
-    public void testGetBeanGeneric() {
+    public void testGetBeanGeneric() throws Exception {
         GenericXmlApplicationContext tester = new GenericXmlApplicationContext();
         assertNotNull((Bus)tester.getBeanFactory().getBean("bus", Bus.class));
     }

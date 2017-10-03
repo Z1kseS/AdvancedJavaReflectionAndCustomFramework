@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 
+import application.classes.Brick;
 import application.classes.Bus;
 import application.classes.Car;
 import application.classes.GreetingService;
@@ -180,7 +181,7 @@ public class MainApp {
         }
     }    
     
-    public static void main(String[] args) {        
+    public static void main(String[] args) throws Exception {        
         context.load(MainApp.class.getResource("/GS_SpringXMLConfig.xml").getPath());
         context.setValidating(true);
         context.setParserType(ParserTypes.SAX);
@@ -223,6 +224,12 @@ public class MainApp {
         System.out.println("Unintercepted string: " + output);
         System.out.println("Intercepted string: " + activeInterceptor.interceptOutputString(output));
         
+        System.out.println(factory.getBean("brick3", Brick.class));
+        System.out.println(factory.getBean("brick4", Brick.class));
+        
+        System.out.println(factory.getBean("brick1", Brick.class));
+        System.out.println(factory.getBean("brick1", Brick.class));
+        System.out.println(factory.getBean("brick1", Brick.class));
         //This block is needed for being able to inspect currently loaded classes 
         //with tools like Java VisualVM
         System.out.println("Press any key to exit...");

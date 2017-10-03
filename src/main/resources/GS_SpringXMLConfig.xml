@@ -1,39 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-  <bean id="greetingService" class="application.classes.GreetingServiceImpl">
-	<constructor-arg type="String" value="Hello World!" />	
-  </bean>
-  
-  <bean id="bus" class="application.classes.Bus">
-	<property name="message" value="Transport type is Bus" />
-  </bean>
-  
-  <bean id="bus2" class="application.classes.Bus"></bean>
-  
-  <bean id="car" class="application.classes.Car">
-	<constructor-arg value="Ferrari" />
-	<constructor-arg type="int" value="4" />	
-  </bean>
-  
-  <interceptor id="interceptor1" class="application.classes.CapitalizingInterceptor"/>
- 
-  <interceptor id="interceptor2" class="application.classes.LowerCasingInterceptor"/>
+	<bean id="greetingService" class="application.classes.GreetingServiceImpl">
+		<constructor-arg type="String" value="Hello World!" />
+	</bean>
 
-  
-  
+	<bean id="bus" class="application.classes.Bus">
+		<property name="message" value="Transport type is Bus" />
+	</bean>
 
-  <!-- 
-  <bean id="..." class="...">
-	<constructor-arg ref="..." />
-	<property name="..." value="..." />
-	<property name="..." ref="..." />
-  </bean>
-  -->
- 
-  <!-- more bean definitions go here -->
+	<bean id="bus2" class="application.classes.Bus"></bean>
+
+	<bean id="brick4" class="application.classes.Brick">
+		<constructor-arg>
+			<bean class="application.classes.Brick">
+				<constructor-arg type="String" value="Level 88" />
+			</bean>
+		</constructor-arg>
+		<constructor-arg type="String" value="Level 14" />
+	</bean>
+
+	<bean id="brick3" class="application.classes.Brick">
+		<constructor-arg ref="brick2" />
+		<constructor-arg type="String" value="Level 2" />
+	</bean>
+
+	<bean id="brick2" class="application.classes.Brick">
+		<constructor-arg ref="brick1" />
+		<constructor-arg type="String" value="Level 1" />
+	</bean>
+
+	<bean id="brick1" scope="prototype" class="application.classes.Brick">
+		<constructor-arg type="String" value="Level 0" />
+	</bean>
+
+	<bean id="car" class="application.classes.Car">
+		<constructor-arg value="Ferrari" />
+		<constructor-arg type="int" value="4" />
+	</bean>
+
+	<interceptor id="interceptor1"
+		class="application.classes.CapitalizingInterceptor" />
+
+	<interceptor id="interceptor2"
+		class="application.classes.LowerCasingInterceptor" />
+
+
+
+
+	<!-- <bean id="..." class="..."> <constructor-arg ref="..." /> <property 
+		name="..." value="..." /> <property name="..." ref="..." /> </bean> -->
+
+	<!-- more bean definitions go here -->
 
 </beans>

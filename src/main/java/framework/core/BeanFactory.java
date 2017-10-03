@@ -35,8 +35,8 @@ public interface BeanFactory {
         
     };
     
-    Object getBean(String string);
-    <T extends Object> T getBean(String string, Class<T> type);
+    Object getBean(String string) throws Exception;
+    <T extends Object> T getBean(String string, Class<T> type) throws Exception;
     Object[] getInterceptors();
     
     default Class<?> getPrimitiveClassForName(String primitiveTypeName) {
