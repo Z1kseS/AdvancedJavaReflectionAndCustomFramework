@@ -163,6 +163,7 @@ public class SaxParser extends DefaultHandler implements Parser {
 	}
 
 	private Bean findBean(String id) {
+		//beanList.stream().filter(bean -> bean.getName() == id).collect(Collectors.toList()).get(0);
 		for (Bean bean : beanList)
 			if (bean.getName().equals(id))
 				return bean;

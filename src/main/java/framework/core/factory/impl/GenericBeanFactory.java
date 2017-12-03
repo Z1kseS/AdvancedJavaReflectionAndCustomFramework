@@ -110,6 +110,10 @@ public class GenericBeanFactory<T> implements BeanFactory {
 
 	private void generateBeans(List<Bean> beanList) throws Exception {
 		for (Bean parsedBean : beanList) {
+			if (parsedBean.getName().equals("beanFactory")) {
+				objectTable.put("beanFactory", this);
+				continue;
+			}
 			Object object = generateBean(parsedBean);
 			objectTable.put(parsedBean.getName(), object);
 		}
@@ -129,31 +133,25 @@ public class GenericBeanFactory<T> implements BeanFactory {
 	}
 
 	private Object calculateBean(Bean bean) throws Exception {
-		Class<?> beanClass = calculateClassName(bean.getClassName());
 		boolean isPrototype = beanTable.get(bean.getName()).isPrototype();
 
 		if (isPrototype) {
 			return generateBean(bean);
 		} else {
-			Object object = objectTable.get(bean.getName());
-
-			if (object == null) {
-				if (beanClass.isPrimitive()) {
-					return getWrapperClassValueForPrimitiveType(beanClass, bean.getValue());
-				}
-				object = beanClass.cast(bean.getValue());
-			}
-
-			return object;
+			return objectTable.get(bean.getName());
 		}
 	}
 
 	public synchronized Object getBean(String string) throws Exception {
+		if (string.equals("beanFactory"))
+			return this;
 		return calculateBean(beanTable.get(string));
 	}
 
 	@SuppressWarnings("unchecked")
 	public synchronized <K> K getBean(String string, Class<K> type) throws Exception {
+		if (string.equals("beanFactory"))
+			return (K) this;
 		return (K) getBean(string);
 	}
 

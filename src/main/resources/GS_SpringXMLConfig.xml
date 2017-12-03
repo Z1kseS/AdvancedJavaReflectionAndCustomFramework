@@ -17,10 +17,10 @@
 	<bean id="brick4" class="application.classes.Brick">
 		<constructor-arg>
 			<bean class="application.classes.Brick">
-				<constructor-arg type="String" value="Level 88" />
+				<constructor-arg type="String" value="Level 10" />
 			</bean>
 		</constructor-arg>
-		<constructor-arg type="String" value="Level 14" />
+		<constructor-arg type="String" value="Level 11" />
 	</bean>
 
 	<bean id="brick3" class="application.classes.Brick">

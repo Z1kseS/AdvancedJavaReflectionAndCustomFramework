@@ -27,9 +27,13 @@ public class PackageParser implements Parser {
 			Bean bean = new Bean();
 			String id = currentClass.getAnnotation(Component.class).value();
 
+			for (Bean b : beans)
+				if (b.getName().equals(id))
+					bean = b;
+
 			bean.setName(id);
 			bean.setClassName(currentClass.getName());
-
+			bean.setStub(false);
 			for (Field currentField : currentClass.getDeclaredFields()) {
 				if (currentField.isAnnotationPresent(Autowiring.class)) {
 					Property property = new Property();
@@ -47,7 +51,6 @@ public class PackageParser implements Parser {
 			beans.add(bean);
 		}
 
-		System.out.println(beans);
 		return beans;
 	}
 
