@@ -1,4 +1,4 @@
-package application.lab3;
+package application.pw3;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,8 +8,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import framework.core.annotations.Component;
+import framework.core.annotations.Prototype;
 
 @Component("customSocketServerThread")
+@Prototype
 public class CustomSocketServerThreadImpl implements CustomSocketServerThread {
 
 	private Socket socket;

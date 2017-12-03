@@ -1,4 +1,4 @@
-package application.lab3;
+package application.pw3;
 
 import java.io.IOException;
 import java.net.ServerSocket;

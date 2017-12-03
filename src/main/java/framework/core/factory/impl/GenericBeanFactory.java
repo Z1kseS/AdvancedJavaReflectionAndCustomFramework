@@ -1,5 +1,6 @@
 package framework.core.factory.impl;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -143,16 +144,22 @@ public class GenericBeanFactory<T> implements BeanFactory {
 	}
 
 	public synchronized Object getBean(String string) throws Exception {
-		if (string.equals("beanFactory"))
-			return this;
 		return calculateBean(beanTable.get(string));
 	}
 
 	@SuppressWarnings("unchecked")
 	public synchronized <K> K getBean(String string, Class<K> type) throws Exception {
-		if (string.equals("beanFactory"))
-			return (K) this;
 		return (K) getBean(string);
+	}
+
+	@Override
+	public List<Object> getObjectsWithAnnotation(Class<? extends Annotation> annotation) {
+		List<Object> objects = new ArrayList<>();
+		for (Object object : objectTable.values()) {
+			if (object.getClass().isAnnotationPresent(annotation))
+				objects.add(object);
+		}
+		return objects;
 	}
 
 }
