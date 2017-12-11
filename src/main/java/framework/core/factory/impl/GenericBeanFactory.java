@@ -21,13 +21,19 @@ public class GenericBeanFactory<T> implements BeanFactory {
 	// Need to keep all beans in order to support different scopes
 	private Map<String, Bean> beanTable = new HashMap<>();
 
-	private Stack<Bean> sortedBeans = new Stack<>();
+	private Stack<String> sortedBeans = new Stack<>();
 	private List<String> topologicSortVisitedBeanNames = new ArrayList<>();
 
 	private int noNameBeanId = 0;
 
 	public GenericBeanFactory(T provider, BeanDefinitionReader<T> xbdr) throws Exception {
 		topologicalSort(xbdr.getBeanList(provider));
+		sortedBeans.push("beanFactory");
+		Bean beanFactory = new Bean();
+		beanFactory.setStub(true);
+		beanFactory.setName("beanFactory");
+		beanFactory.setClassName("framework.core.factory.BeanFactory");
+		beanTable.put("beanFactory", beanFactory);
 		generateBeans(new ArrayList<>(sortedBeans));
 	}
 
@@ -39,23 +45,27 @@ public class GenericBeanFactory<T> implements BeanFactory {
 
 	// Sort dependencies in order to correctly create all beans
 	private void topologicalSort(Bean bean) {
+		if (!bean.isStub()) {
+			beanTable.put(bean.getName(), bean);
+		} else
+			return;
+
 		if (bean.getName() == null)
 			bean.setName((noNameBeanId++) + "-b");
 
 		topologicSortVisitedBeanNames.add(bean.getName());
 
 		for (Bean son : bean.getConstructorArg())
-			if (son.getName() == null || !topologicSortVisitedBeanNames.contains(son.getName()))
+			if (son.getName() == null || !son.isStub())
 				topologicalSort(son);
 
 		for (Property property : bean.getProperties()) {
 			Bean son = property.getBean();
-			if (son.getName() == null || !topologicSortVisitedBeanNames.contains(son.getName()))
+			if (son.getName() == null || !son.isStub())
 				topologicalSort(son);
 		}
 
-		beanTable.put(bean.getName(), bean);
-		sortedBeans.push(bean);
+		sortedBeans.push(bean.getName());
 	}
 
 	private Object generateBean(Bean parsedBean) throws Exception {
@@ -109,14 +119,14 @@ public class GenericBeanFactory<T> implements BeanFactory {
 		return object;
 	}
 
-	private void generateBeans(List<Bean> beanList) throws Exception {
-		for (Bean parsedBean : beanList) {
-			if (parsedBean.getName().equals("beanFactory")) {
+	private void generateBeans(List<String> beanList) throws Exception {
+		for (String parsedBeanName : beanList) {
+			if (parsedBeanName.equals("beanFactory")) {
 				objectTable.put("beanFactory", this);
 				continue;
 			}
-			Object object = generateBean(parsedBean);
-			objectTable.put(parsedBean.getName(), object);
+			Object object = generateBean(beanTable.get(parsedBeanName));
+			objectTable.put(parsedBeanName, object);
 		}
 	}
 

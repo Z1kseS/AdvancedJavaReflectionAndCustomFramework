@@ -25,7 +25,7 @@ public class PackageParser implements Parser {
 		List<Bean> beans = new ArrayList<>();
 		beans.addAll(calculateBeanList(this.packageName));
 		beans.addAll(calculateBeanList("framework"));
-
+		
 		return beans;
 	}
 
