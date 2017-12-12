@@ -1,6 +1,6 @@
 package application.main;
 
-import application.pw4.Student;
+import application.pw4.Mark;
 import framework.core.context.GenericAnnotationApplicationContext;
 import framework.hibernate.manager.EntityManager;
 
@@ -14,6 +14,6 @@ public class MainApp4 {
 		entityManager.loadProperties(
 				"C:\\Users\\Oleh Yanivskyy\\Desktop\\Магістратура\\БВПМ\\AdvancedJavaReflectionAndCustomFramework\\src\\main\\resources\\db.properties");
 
-		System.out.println(entityManager.getEntities(Student.class));
+		System.out.println(entityManager.getEntities(Mark.class));
 	}
 }

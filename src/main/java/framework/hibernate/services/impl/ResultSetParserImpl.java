@@ -11,6 +11,7 @@ import framework.core.annotations.Component;
 import framework.hibernate.annotations.Bool;
 import framework.hibernate.annotations.DateTime;
 import framework.hibernate.annotations.Floating;
+import framework.hibernate.annotations.Id;
 import framework.hibernate.annotations.Int;
 import framework.hibernate.annotations.Text;
 import framework.hibernate.services.ResultSetParser;
@@ -37,7 +38,7 @@ public class ResultSetParserImpl implements ResultSetParser {
 			classObject = String.class;
 		} else if (field.getAnnotation(Int.class) != null) {
 			value = resultSet.getInt(field.getAnnotation(Int.class).fieldName());
-			classObject = Int.class;
+			classObject = Integer.class;
 		} else if (field.getAnnotation(Floating.class) != null) {
 			value = resultSet.getFloat(field.getAnnotation(Floating.class).fieldName());
 			classObject = Float.class;
@@ -47,6 +48,9 @@ public class ResultSetParserImpl implements ResultSetParser {
 		} else if (field.getAnnotation(DateTime.class) != null) {
 			value = resultSet.getDate(field.getAnnotation(DateTime.class).fieldName());
 			classObject = Date.class;
+		} else if (field.getAnnotation(Id.class) != null) {
+			value = resultSet.getLong(field.getAnnotation(Id.class).fieldName());
+			classObject = long.class;
 		}
 
 		if (classObject == null)

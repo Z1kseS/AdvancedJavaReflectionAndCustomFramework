@@ -47,8 +47,10 @@ public class GenericBeanFactory<T> implements BeanFactory {
 	private void topologicalSort(Bean bean) {
 		if (!bean.isStub()) {
 			beanTable.put(bean.getName(), bean);
-		} else
+		} else {
+			sortedBeans.push(bean.getName());
 			return;
+		}
 
 		if (bean.getName() == null)
 			bean.setName((noNameBeanId++) + "-b");
@@ -56,16 +58,15 @@ public class GenericBeanFactory<T> implements BeanFactory {
 		topologicSortVisitedBeanNames.add(bean.getName());
 
 		for (Bean son : bean.getConstructorArg())
-			if (son.getName() == null || !son.isStub())
-				topologicalSort(son);
+			topologicalSort(son);
 
 		for (Property property : bean.getProperties()) {
 			Bean son = property.getBean();
-			if (son.getName() == null || !son.isStub())
-				topologicalSort(son);
+			topologicalSort(son);
 		}
 
-		sortedBeans.push(bean.getName());
+		if (!sortedBeans.contains(bean.getName()))
+			sortedBeans.push(bean.getName());
 	}
 
 	private Object generateBean(Bean parsedBean) throws Exception {
